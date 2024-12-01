@@ -1,4 +1,5 @@
 var express = require("express");
+var MongoClient = require("mongodb").MongoClient;
 
 const app = express();
 
@@ -18,6 +19,14 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
     res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");  
     next();  
+})
+
+// Connect to the MongoDB database
+let db;
+MongoClient.connect('mongodb+srv://vk425:5euTYXb6kxOq4kRz@cluster0.rq7px.mongodb.net/', (err, client) => {
+    if (err) return console.log(err)
+    db = client.db('AfterSchoolClasses')
+    console.log("Connected to MongoDB");
 })
 
 const port = process.env.PORT || 3000;
