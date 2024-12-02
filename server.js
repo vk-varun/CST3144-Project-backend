@@ -1,5 +1,7 @@
 var express = require("express");
 var MongoClient = require("mongodb").MongoClient;
+var path = require("path");
+var fs = require("fs");
 
 const app = express();
 
@@ -76,8 +78,23 @@ app.put('/collection/:collectionName', (req, res, next) => {
     res.send({ msg: 'Availability updated successfully' });
 });
 
+// search data in the collection
+
 // static file middleware to serve images
 app.use('/static', express.static(path.join(__dirname, 'static')));
+
+// error handling middleware for missing static files
+app.use('/static', (req, res, next) => {
+    var filePath = path.join(__dirname, "static", req.url);
+    fs.stat(filePath, function(err, fileInfo) {
+        if (err || !fileInfo.isFile()) {
+            res.status(404).send("File not found!");
+        } else {
+            next();
+        }
+    });
+});
+
 
 // start the server
 const port = process.env.PORT || 3000;
