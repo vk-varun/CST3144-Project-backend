@@ -83,6 +83,10 @@ app.post('/collection/:collectionName/search', (req, res, next) => {
     // Get the search query from the request body
     const searchQuery = req.body.search;  
 
+    if (!searchQuery) {
+        return res.status(400).json({ msg: "Search query is required" });
+    }
+
     // Case-insensitive regex
     const searchRegex = new RegExp(searchQuery, 'i');  
 
