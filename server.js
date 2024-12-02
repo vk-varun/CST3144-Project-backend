@@ -79,6 +79,30 @@ app.put('/collection/:collectionName', (req, res, next) => {
 });
 
 // search data in the collection
+app.post('/collection/:collectionName/search', (req, res, next) => {
+    // Get the search query from the request body
+    const searchQuery = req.body.search;  
+
+    // Case-insensitive regex
+    const searchRegex = new RegExp(searchQuery, 'i');  
+
+    // query to search across multiple fields
+    const query = {
+        $or: [
+            { title: { $regex: searchRegex } },
+            { description: { $regex: searchRegex } },
+            { location: { $regex: searchRegex } },
+            { price: parseFloat(searchQuery) },
+            { availableInventory: parseInt(searchQuery) }
+        ]
+    };
+
+    // Search the collection with the query
+    req.collection.find(query).toArray((err, results) => {
+        if (err) return next(err);
+        res.json(results);
+    });
+});
 
 // static file middleware to serve images
 app.use('/static', express.static(path.join(__dirname, 'static')));
