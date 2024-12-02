@@ -29,6 +29,12 @@ MongoClient.connect('mongodb+srv://vk425:5euTYXb6kxOq4kRz@cluster0.rq7px.mongodb
     console.log("Connected to MongoDB");
 })
 
+// display a message for root path to show that API is working
+app.get('/', (req, res) => {
+    res.send('Select a collection, e.g., /collection/messages')
+})
+
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
