@@ -56,6 +56,26 @@ app.post('/collection/:collectionName', (req, res) => {
     })
 })
 
+// update data in the collection
+app.put('/collection/:collectionName', (req, res, next) => {
+    const updatedClasses = req.body;
+    // Update the 'availableInventory'
+
+    updatedClasses.forEach(classData => {
+        req.collection.updateOne(
+            { id: classData.id },
+            { $set: { availableInventory: classData.availableInventory } },
+            { safe: true },
+            (e, result) => {
+                if (e) return next(e);
+                res.send((result.result.n === 1) ? { msg: 'success' } : { msg: 'error' })
+            }
+        );
+    });
+
+    res.send({ msg: 'Availability updated successfully' });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
