@@ -48,6 +48,14 @@ app.get('/collection/:collectionName', (req, res) => {
     })
 })
 
+// post data to the collection
+app.post('/collection/:collectionName', (req, res) => {
+    req.collection.insert(req.body, (e, results) => {
+        if (e) return next(e)
+        res.send(results.ops)
+    })
+})
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
