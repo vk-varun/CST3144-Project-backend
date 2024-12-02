@@ -40,6 +40,14 @@ app.param('collectionName', (req, res, next, collectionName) => {
     return next()
 })
 
+// retrieve all the objects from a collection
+app.get('/collection/:collectionName', (req, res) => {
+    req.collection.find({}).toArray((e, result) => {
+        if (e) return next(e)
+        res.send(result)
+    })
+})
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
