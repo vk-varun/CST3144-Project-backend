@@ -34,6 +34,11 @@ app.get('/', (req, res) => {
     res.send('Select a collection, e.g., /collection/messages')
 })
 
+// get the collection name
+app.param('collectionName', (req, res, next, collectionName) => {
+    req.collection = db.collection(collectionName)
+    return next()
+})
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
