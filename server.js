@@ -76,6 +76,10 @@ app.put('/collection/:collectionName', (req, res, next) => {
     res.send({ msg: 'Availability updated successfully' });
 });
 
+// static file middleware to serve images
+app.use('/static', express.static(path.join(__dirname, 'static')));
+
+// start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
